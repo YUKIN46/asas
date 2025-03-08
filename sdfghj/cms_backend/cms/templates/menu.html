@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canteen Menu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+       * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.header {
+    background: #ffffff;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+}
+
+.header-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    height: 50px;
+    width: auto;
+}
+
+.logo img {
+    height: 100%;
+    width: auto;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #333;
+    text-align: center;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.menu-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    flex-grow: 1;
+    width: 100%;
+}
+
+.category-section {
+    margin-bottom: 2rem;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+h2 {
+    h2 {
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);  /* Two columns on larger screens */
+    gap: 1.5rem;
+    margin-top: 1rem;
+    width: 100%;
+}
+.menu-item {
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    align-items: center;
+}
+
+
+
+.menu-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+
+
+.item-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #000000;
+    font-weight: bolder;
+}
+
+.item-price {
+    color: #181b1b;
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.quantity-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quantity-button {
+    background-color: #f1f1f1;
+    border: 1px solid #e1e8ed;
+    border-radius: 4px;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    text-align-last: justify;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    align-content: space-between;
+    vertical-align: top;
+}
+
+.quantity-button:hover {
+    background-color: #e1e8ed;
+}
+
+.quantity-input {
+    width: 60px;
+    padding: 0.5rem;
+    border: 1px solid #e1e8ed;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.add-to-cart {
+    background: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.75rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.add-to-cart:hover {
+    background: #27ae60;
+}
+
+.cart-button {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: #2c3e50;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: transform 0.2s, background-color 0.2s;
+    z-index: 1000;
+}
+
+.cart-button:hover {
+    transform: scale(1.1);
+    background: #34495e;
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.toast {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background: #2ecc71;
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    display: none;
+    animation: slideIn 0.3s ease-out;
+    z-index: 1000;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .menu-grid {
+        grid-template-columns: 1fr;  /* One column for medium screens */
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .cart-button {
+        bottom: 1rem;
+        right: 1rem;
+        width: 50px;
+        height: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+    .category-section {
+        padding: 1rem;
+    }
+
+    .header {
+        padding: 0.5rem;
+    }
+
+    .logo {
+        height: 40px;
+    }
+
+    h1 {
+        font-size: 1.25rem;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="home.html" class="logo">
+                <img src="cmsl.png" alt="CMS Logo">
+            </a>
+            <h1>Canteen Menu</h1>
+        </div>
+    </div>
+
+    <div class="menu-container" id="menu-content"></div>
+
+    <a href="{% url 'cart' %}" class="cart-button">
+        <i class="fas fa-shopping-cart fa-lg"></i>
+        <span class="cart-count" id="cart-count">0</span>
+    </a>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let menu = JSON.parse(localStorage.getItem('menu')) || [];
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        function updateCartCount() {
+            const cartCount = document.getElementById('cart-count');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2000);
+        }
+
+        function renderMenu() {
+    const menuContent = document.getElementById('menu-content');
+    menuContent.innerHTML = '';
+
+    const categories = {};
+    menu.forEach(item => {
+        // Only process available items
+        if (item.available) {
+            if (!categories[item.category]) {
+                categories[item.category] = [];
+            }
+            categories[item.category].push(item);
+        }
+    });
+
+    for (const category in categories) {
+        if (categories[category].length > 0) { // Only create section if there are available items
+            const categorySection = document.createElement('div');
+            categorySection.className = 'category-section';
+            
+            categorySection.innerHTML = `
+                <h2>${category}</h2>
+                <div class="menu-grid">
+                    ${categories[category].map(item => `
+                        <div class="menu-item">
+                            <div class="item-name">${item.itemName}</div>
+                            <div class="item-price">₹${item.price}</div>
+                            <div class="quantity-container">
+                                <button class="quantity-button" onclick="changeQuantity('${item.itemName}', -1)">-</button>
+                                <input type="number" class="quantity-input" value="1" min="1" id="qty-${item.itemName.replace(/\s+/g, '-')}" />
+                                <button class="quantity-button" onclick="changeQuantity('${item.itemName}', 1)">+</button>
+                            </div>
+                            <button class="add-to-cart" onclick="addToCart('${item.itemName}', ${item.price}, '${category}')">
+                                <i class="fas fa-plus"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                   `).join('')}
+                </div>
+            `;
+            
+            menuContent.appendChild(categorySection);
+        }
+    }
+}
+
+        function changeQuantity(itemName, change) {
+            const qtyInput = document.getElementById(`qty-${itemName.replace(/\s+/g, '-')}`);
+            let currentQuantity = parseInt(qtyInput.value);
+
+            currentQuantity += change;
+
+            if (currentQuantity < 1) {
+                currentQuantity = 1;
+            }
+
+            qtyInput.value = currentQuantity;
+        }
+
+        function addToCart(itemName, price, category) {
+            const qtyInput = document.getElementById(`qty-${itemName.replace(/\s+/g, '-')}`);
+            const quantity = parseInt(qtyInput.value);
+
+            if (quantity < 1) {
+                showToast('Please enter a valid quantity');
+                return;
+            }
+
+            const existingItem = cart.find(item => item.itemName === itemName);
+
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({ itemName, price, category, quantity });
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            showToast(`${quantity} ${itemName}${quantity > 1 ? 's' : ''} added to cart`);
+            qtyInput.value = 1;
+        }
+        function renderMenu() {
+    const menuContent = document.getElementById('menu-content');
+    menuContent.innerHTML = '';
+
+    const categories = {};
+    // First pass to collect all unique categories and their colors
+    menu.forEach(item => {
+        if (item.available) {
+            if (!categories[item.category]) {
+                // Assign specific colors based on category
+                let categoryColor;
+                switch (item.category) {
+                    case 'Food':
+                        categoryColor = '#90EE90'; // Light orange
+                        break;
+                    case 'Hot Drink':
+                        categoryColor = '#B8860B'; // Darker orange
+                        break;
+                    case 'Cold Drink':
+                        categoryColor = '#ADD8E6'; // Glacier blue
+                        break;
+                        
+                    case 'Snacks':
+                        categoryColor = '#FFC0CB'; // Strawberry color
+                        break;
+                        
+                    case 'Bakery Items':
+                        categoryColor = '#FFDAB9'; // Strawberry color
+                        break;
+                    
+                    case 'Combo offers':
+                        categoryColor = '#9370DB'; 
+                        break;
+                    default:
+                        categoryColor = '#ffffff'; // Default white
+                }
+                categories[item.category] = {
+                    items: [],
+                    color: categoryColor
+                };
+            }
+            categories[item.category].items.push(item);
+        }
+    });
+
+    for (const category in categories) {
+        if (categories[category].items.length > 0) {
+            const categorySection = document.createElement('div');
+            categorySection.className = 'category-section';
+            
+            // Apply the background color and calculate text color
+            const backgroundColor = categories[category].color;
+            const textColor = getContrastColor(backgroundColor);
+            
+            categorySection.style.backgroundColor = backgroundColor;
+            
+            categorySection.innerHTML = `
+                <h2 style="color: ${textColor}; border-bottom-color: ${adjustColorOpacity(textColor, 0.2)}">${category}</h2>
+                <div class="menu-grid">
+                    ${categories[category].items.map(item => `
+                        <div class="menu-item" style="background: ${adjustColorOpacity('#ffffff', 0.9)}">
+                            <div class="item-name">${item.itemName}</div>
+                            <div class="item-price">₹${item.price}</div>
+                            <div class="quantity-container">
+                                <button class="quantity-button" onclick="changeQuantity('${item.itemName}', -1)">-</button>
+                                <input type="number" class="quantity-input" value="1" min="1" id="qty-${item.itemName.replace(/\s+/g, '-')}" />
+                                <button class="quantity-button" onclick="changeQuantity('${item.itemName}', 1)">+</button>
+                            </div>
+                            <button class="add-to-cart" onclick="addToCart('${item.itemName}', ${item.price}, '${category}')">
+                                <i class="fas fa-plus"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            menuContent.appendChild(categorySection);
+        }
+    }
+}
+
+// Helper function to determine text color based on background
+function getContrastColor(hexcolor) {
+    // Remove the # if present
+    hexcolor = hexcolor.replace('#', '');
+    
+    // Convert to RGB
+    const r = parseInt(hexcolor.substr(0,2),16);
+    const g = parseInt(hexcolor.substr(2,2),16);
+    const b = parseInt(hexcolor.substr(4,2),16);
+    
+    // Calculate luminance
+    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    
+    return (yiq >= 128) ? '#000000' : '#ffffff';
+}
+
+// Helper function to adjust color opacity
+function adjustColorOpacity(color, opacity) {
+    if (color.startsWith('#')) {
+        color = color.replace('#', '');
+        const r = parseInt(color.substr(0,2),16);
+        const g = parseInt(color.substr(2,2),16);
+        const b = parseInt(color.substr(4,2),16);
+        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    }
+    return color;
+}
+//window.onload function
+window.onload = function() {
+    renderMenu();
+    updateCartCount();
+};
+
+        window.onload = function() {
+    renderMenu();
+    updateCartCount();
+    
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Contact Us - Canteen Management System</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        header {
+            background: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 32px;
+            text-transform: uppercase;
+        }
+
+        .container {
+            width: 85%;
+            margin: 20px auto;
+            overflow: hidden;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #444;
+            animation: slideInLeft 1.5s ease-in-out;
+        }
+
+        p {
+            font-size: 18px;
+            color: #555;
+            animation: fadeIn 2.5s ease-in-out;
+        }
+
+        .contact-info {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 1.5s ease-in-out;
+        }
+
+        .contact-info a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-info a:hover {
+            color: #0056b3;
+        }
+
+        .contact-info i {
+            margin-right: 10px;
+            color: #007bff;
+        }
+
+        .footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 14px;
+            color: #f9f9f9;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Hover Effects */
+        .contact-info:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h1>Contact Us</h1>
+    </div>
+</header>
+
+<section class="container">
+    <p>We’d love to hear from you! Whether you have questions, feedback, or need assistance, our team is here to help. Feel free to reach out to us through any of the channels below.</p>
+
+    <div class="contact-info">
+        <h2><i class="fas fa-headset"></i> Customer Support</h2>
+        <p>Email: <a href="mailto:Sandeshchhetri038@gmail.com">Sandeshchhetri038@gmail.com</a></p>
+        <p>Phone: <a href="tel:+9779745654063">+977 9745654063</a></p>
+        <p>Live Chat: Available on Facebook or Instagram pages. [10 am to 5 pm]</p>
+    </div>
+
+    <div class="contact-info">
+        <h2><i class="fas fa-envelope"></i> General Inquiries</h2>
+        <p>Email: <a href="mailto:pawanpoudel555@gmail.com">pawanpoudel555@gmail.com</a></p>
+        <p>Phone: <a href="tel:+9779865298430">+977 9865298430</a></p>
+    </div>
+
+    <div class="contact-info">
+        <h2><i class="fas fa-share-alt"></i> Follow Us</h2>
+        <p>
+            <a href="https://www.facebook.com/sandesh.chhetri.351">
+                <i class="fab fa-facebook"></i> Let's get connected on Facebook
+            </a>
+        </p>
+        <p>
+            <a href="https://www.instagram.com/sandeshchhetri999/">
+                <i class="fab fa-instagram"></i> Let's get connected on Instagram
+            </a>
+        </p>
+    </div>
+
+    <div class="contact-info">
+        <h2><i class="fas fa-map-marker-alt"></i> Visit Us</h2>
+        <p>Address: Tahachal, Kalimati, Kathmandu</p>
+        <p>Office Hours: 6 AM - 9 PM</p>
+    </div>
+
+    <div class="contact-info">
+        <h2><i class="fas fa-comment-dots"></i> Feedback</h2>
+        <p>We value your input! If you have any suggestions or feedback to help us improve our platform, please share your thoughts with us through our feedback form: <a href="#">Feedback Form Link</a>.</p>
+    </div>
+
+    <div class="contact-info">
+        <h2><i class="fas fa-question-circle"></i> FAQs</h2>
+        <p>Looking for quick answers? Check out our <a href="#">FAQ page</a> for commonly asked questions and immediate assistance.</p>
+    </div>
+
+    <p>We’re here to help. No matter what your question or concern, our goal is to ensure that your experience is smooth and enjoyable. Reach out to us anytime!</p>
+</section>
+
+<footer class="footer">
+    <p>&copy; 2024 Canteen Management System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

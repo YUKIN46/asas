@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Canteen Management System</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background: url('https://images.unsplash.com/photo-1495195129352-aeb325a55b65?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+        }
+        
+    header .container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 10px 20px;
+    }
+
+    header img {
+        margin-right: 20px;
+    }
+
+    header p {
+        margin: 0;
+        line-height: 1.2;
+    }
+        header {
+            background: rgba(51, 51, 51, 0.9);
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            width: 85%;
+            margin: auto;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            margin-bottom: 80px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            animation: slideInLeft 1.5s ease-in-out;
+        }
+
+        p {
+            font-size: 18px;
+            color: #555;
+            animation: fadeIn 2.5s ease-in-out;
+        }
+
+        ul {
+            list-style-type: square;
+            padding-left: 20px;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .team-member {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(247, 247, 247, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 1.5s ease-in-out;
+        }
+
+        .team-member h3 {
+            margin: 0;
+            color: #333;
+            font-size: 22px;
+        }
+
+        .team-member p {
+            margin: 5px 0;
+            font-size: 16px;
+            color: #777;
+        }
+
+        .footer {
+            background: rgba(51, 51, 51, 0.9);
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer p {
+            margin: 0;
+            color: #fff;
+            font-size: 15px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Hover Effects */
+        .team-member:hover {
+            transform: scale(1.02);
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+       <div class="container">
+        <a href="home.html",>
+            <img src="cmsl.png"alt="Your Logo" width="80" height="auto" margin="20px" align:"left">
+        </a>
+        <h1><strong>Canteen Management System</strong></h1>
+        </div>
+</header>
+
+<section class="container">
+    <h1>ABOUT US</h1>
+    <p>Welcome to the Canteen Management System of Mahendra Ratna Campus! We are a passionate group of students dedicated to making campus life more convenient and efficient for everyone. As technology enthusiasts, we recognized the need for a streamlined solution to manage our canteen operations, and that’s how our journey began.</p>
+    
+    <p>Our system is designed to simplify the process of ordering food, managing products, and ensuring smooth transactions—all in one place. Whether you’re a student, faculty member, or visitor, our goal is to provide a seamless experience that saves time and enhances the quality of service at our canteen.</p>
+    
+    <p>This project has been a collaborative effort, combining our knowledge in technology, management, and user experience to create a platform that caters to the needs of our campus community. We’ve worked hard to ensure that our system is not only functional but also secure and user-friendly.</p>
+    
+    <p>Thank you for supporting our initiative. We hope our system will bring positive changes to your daily routine and make your experience at Mahendra Ratna Campus even better.</p>
+
+    <h2>Our Mission</h2>
+    <p>Our mission is to revolutionize the way canteens operate by providing a user-friendly, efficient, and dynamic management system. We aim to simplify the canteen's daily operations, reduce wait times, improve inventory management, and ultimately create a more enjoyable and seamless experience for everyone involved.</p>
+
+    <h2>Our Team</h2>
+    
+    <div class="team-member">
+        <h3>Sandesh Chhetri – Project Lead/Front End Developer</h3>
+        <p>Sandesh is responsible for the overall project management and the development of the user interface. His expertise ensures a seamless and intuitive user experience.</p>
+    </div>
+    
+    <div class="team-member">
+        <h3>Pawan Paudel – Backend Developer</h3>
+        <p>Pawan handles the server-side logic, database integration, and ensures the system runs smoothly behind the scenes.</p>
+    </div>
+    
+    <div class="team-member">
+        <h3>Sumitra Shahi Thakuri – Documentation</h3>
+        <p>Sumitra is in charge of creating comprehensive documentation, user manuals, and ensuring the system is well-documented for future reference.</p>
+    </div>
+    
+    <div class="team-member">
+        <h3>Ranjita Singh – Database Management</h3>
+        <p>Ranjita manages the database, ensuring data integrity, security, and efficient data retrieval for the system.</p>
+    </div>
+
+    <h2>Our Solution Features</h2>
+    <p>Our Canteen Management System offers a range of features designed to optimize canteen operations:</p>
+    <ul>
+        <li><strong>Real-Time Inventory Tracking:</strong> Keep an accurate count of supplies and automatically update stock levels.</li>
+        <li><strong>Order Management:</strong> Streamline the process of placing, tracking, and fulfilling orders.</li>
+        <li><strong>User-Friendly Interface:</strong> Intuitive design ensures ease of use for both staff and customers.</li>
+        <li><strong>Sales Analytics:</strong> Generate reports and insights to make data-driven decisions and improve operations.</li>
+        <li><strong>Feedback Mechanism:</strong> Collect and analyze user feedback to continuously refine and enhance the system.</li>
+        <li><strong>Mobile Compatibility:</strong> Access the system on any device, ensuring convenience for users on the go.</li>
+        <li><strong>Secure Payments:</strong> Integrated payment gateway for safe and hassle-free transactions.</li>
+    </ul>
+    
+    <h2>Why It Matters</h2>
+    <p>We understand the challenges that come with managing a canteen and the importance of providing a seamless experience for everyone involved. By integrating modern technology with practical solutions, we aim to make the canteen a more efficient and enjoyable place for students and staff. Our system is designed with the end-user in mind, ensuring that it not only meets but exceeds expectations.</p>
+
+    <h2>Future Plans</h2>
+    <p>We are continuously working on improving our system. Some of our future plans include:</p>
+    <ul>
+        <li>Integration with campus ID cards for faster checkouts.</li>
+        <li>AI-based recommendations for menu items based on user preferences.</li>
+        <li>Expanding the system to other campuses and institutions.</li>
+    </ul>
+</section>
+
+<footer class="footer">
+    <p>&copy; 2024 Canteen Management System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

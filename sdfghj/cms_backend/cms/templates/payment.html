@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2a8a48;
+        }
+
+        .checkout-container {
+            width: 90%;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .payment-options, .table-number {
+            margin-top: 20px;
+        }
+
+        .payment-option, .table-number-select {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .confirm-btn {
+            background-color: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            display: block;
+            width: 200px;
+            text-align: center;
+            margin: 20px auto;
+            cursor: pointer;
+        }
+
+        .confirm-btn:hover {
+            background-color: #219150;
+        }
+
+        .total-cost {
+            font-size: 18px;
+            text-align: right;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .esewa-qr {
+            text-align: center;
+            display: none;
+            margin-top: 20px;
+        }
+
+        .esewa-qr img {
+            width: 200px;
+            height: 200px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-content h2 {
+            color: #2a8a48;
+            margin-bottom: 15px;
+        }
+
+        .modal-content p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .modal-content button {
+            background-color: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .modal-content button:hover {
+            background-color: #219150;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Checkout</h1>
+
+    <div class="checkout-container">
+        <!-- Table Number selection -->
+        <div class="table-number">
+            <label for="table-number">Select Table Number:</label>
+            <select id="table-number" class="table-number-select" required>
+                <option value="" disabled selected>Select Table No.</option>
+                <option value="A1">A1</option>
+                <option value="A2">A2</option>
+                <option value="A3">A3</option>
+                <option value="B1">B1</option>
+                <option value="B2">B2</option>
+            </select>
+        </div>
+
+        <div class="payment-options">
+            <h3>Select Payment Method</h3>
+            <label class="payment-option">
+                <input type="radio" name="payment-method" value="eSewa" checked> eSewa Payment
+            </label>
+            <label class="payment-option">
+                <input type="radio" name="payment-method" value="Khalti"> Pay with Khalti
+            </label>
+            <label class="payment-option">
+                <input type="radio" name="payment-method" value="COD"> Cash on Delivery (COD)
+            </label>
+        </div>
+
+        <div class="total-cost" id="total-cost">
+            Total Cost: Rs. <span id="totalAmount"></span>
+        </div>
+
+        <button class="confirm-btn" onclick="confirmTransaction()">Confirm Transaction</button>
+    </div>
+
+    <!-- eSewa QR Code -->
+    <div class="esewa-qr" id="esewa-qr">
+        <h3>Scan to Pay with eSewa</h3>
+        <img src="esewa.jpg" alt="eSewa QR Code">
+        <p>Please scan the QR code above to complete your payment via eSewa.</p>
+    </div>
+
+    <!-- Order Confirmation Modal -->
+    <div class="modal" id="orderConfirmationModal">
+        <div class="modal-content">
+            <h2>Order Placed Successfully!</h2>
+            <p>Your order has been placed. Thank you for your purchase!</p>
+            <button onclick="redirectToThankYou()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // Calculate total cost
+        function calculateTotal() {
+            let totalCost = 0;
+            cart.forEach(item => {
+                totalCost += item.price * item.quantity;
+            });
+            return totalCost;
+        }
+
+        document.getElementById('totalAmount').textContent = calculateTotal().toFixed(2);
+
+        // Khalti Configuration
+        var khaltiConfig = {
+            "publicKey": "test_public_key_dc74e0fd57cb46cd93832aee0a390234",
+            "productIdentity": "1234567890",
+            "productName": "Food Order",
+            "productUrl": "http://example.com",
+            "paymentPreference": [
+                "KHALTI",
+                "EBANKING",
+                "MOBILE_BANKING",
+                "CONNECT_IPS",
+                "SCT",
+            ],
+            "eventHandler": {
+                onSuccess(payload) {
+                    console.log("Khalti Payment Success:", payload);
+                    saveTransaction("Khalti");
+                    showOrderConfirmation();
+                },
+                onError(error) {
+                    console.log("Khalti Payment Error:", error);
+                    alert("Payment failed! Try again.");
+                },
+                onClose() {
+                    console.log("Khalti widget closed");
+                }
+            }
+        };
+
+        var khaltiCheckout = new KhaltiCheckout(khaltiConfig);
+
+        // Show order confirmation modal
+        function showOrderConfirmation() {
+            const modal = document.getElementById('orderConfirmationModal');
+            modal.style.display = 'flex';
+        }
+
+        // Redirect to thank you page
+        function redirectToThankYou() {
+            clearCart(); // Clear the cart before redirecting
+            window.location.href = "thank_you.html";
+        }
+
+        // Clear the cart
+        function clearCart() {
+            localStorage.removeItem('cart'); // Remove the cart from localStorage
+            cart = []; // Reset the cart array
+            console.log("Cart cleared successfully!"); // Debugging: Log to confirm cart is cleared
+        }
+
+        // Confirm transaction
+        function confirmTransaction() {
+            const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+            const totalCost = calculateTotal();
+            const tableNumber = document.getElementById('table-number').value;
+
+            if (!tableNumber) {
+                alert('Please select a table number.');
+                return;
+            }
+
+            if (paymentMethod === 'eSewa') {
+                document.getElementById('esewa-qr').style.display = 'block';
+                alert('Please scan the QR code to complete your payment via eSewa.');
+                saveTransaction("eSewa");
+                showOrderConfirmation();
+            } else if (paymentMethod === 'Khalti') {
+                khaltiCheckout.show({ amount: totalCost * 100 }); // Convert Rs to paisa
+            } else {
+                alert('Transaction successful! Payment method: ' + paymentMethod);
+                saveTransaction("COD");
+                showOrderConfirmation();
+            }
+        }
+
+       // Save transaction data
+function saveTransaction(method) {
+    const transaction = {
+        user_id: currentUser ? currentUser.id : 'N/A', // Ensure user_id is handled correctly
+        paymentMethod: method,
+        totalCost: calculateTotal(),
+        tableNumber: document.getElementById('table-number').value,
+        cart: [...cart], // Create a copy of the cart to avoid reference issues
+        date: new Date().toISOString(),
+        transactionNumber: generateTransactionNumber() // Generate a unique transaction number
+    };
+
+    let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+    transactions.push(transaction);
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+
+    // Clear the cart after saving the transaction
+    clearCart();
+}
+
+// Generate a unique transaction number
+function generateTransactionNumber() {
+    return 'TXN' + Date.now();
+}
+
+// Clear the cart
+function clearCart() {
+    localStorage.removeItem('cart');
+    cart = [];
+    console.log("Cart cleared successfully!");
+}
+
+
+    </script>
+
+</body>
+</html>

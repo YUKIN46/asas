@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-dark: #3a56d4;
+            --text-color: #333;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #6c757d;
+            --success-color: #38b000;
+            --error-color: #d90429;
+            --border-radius: 8px;
+            --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--text-color);
+        }
+
+        .container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .signup-box {
+            background: white; 
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 100%; 
+            max-width: 450px; 
+            padding: 35px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        h2 { 
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        h3 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--medium-gray);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            color: var(--success-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .password-requirements {
+            background-color: var(--light-gray);
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            margin-top: 8px;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .password-requirement {
+            display: flex;
+            align-items: center;
+            margin:.5px 0;
+            color: var(--dark-gray);
+        }
+
+        .password-requirement.valid {
+            color: var(--success-color);
+        }
+
+        .password-requirement i {
+            margin-right: 8px;
+            font-size: 12px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .divider:before, .divider:after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .divider span {
+            padding: 0 10px;
+            color: var(--dark-gray);
+            font-size: 14px;
+        }
+
+        .otp-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .otp-inputs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .otp-input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 20px;
+            border: 1px solid var(--medium-gray);
+            border-radius: var(--border-radius);
+            margin: 0 5px;
+        }
+
+        .otp-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 24px;
+            color: var(--dark-gray);
+            transition: var(--transition);
+        }
+
+        .close:hover {
+            color: var(--error-color);
+        }
+
+        .image-upload {
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .image-preview {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 15px;
+            border: 2px dashed var(--medium-gray);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        .image-preview i {
+            font-size: 50px;
+            color: var(--dark-gray);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-btn {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: var(--light-gray);
+            color: var(--text-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .upload-btn:hover {
+            background-color: var(--medium-gray);
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--medium-gray);
+            color: var(--dark-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 15px;
+            position: relative;
+            font-weight: bold;
+        }
+
+        .step.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .step.completed {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .step:not(:last-child):after {
+            content: '';
+            position: absolute;
+            width: 45px;
+            height: 2px;
+            background-color: var(--medium-gray);
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+        }
+
+        .step.completed:not(:last-child):after {
+            background-color: var(--success-color);
+        }
+
+        @media (max-width: 576px) {
+            .signup-box {
+                padding: 25px 20px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            .form-control, .btn {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .otp-input {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .step {
+                width: 25px;
+                height: 25px;
+                margin: 0 10px;
+                font-size: 12px;
+            }
+
+            .step:not(:last-child):after {
+                width: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="signup-box">
+            <div class="step-indicator">
+                <div class="step active">1</div>
+                <div class="step">2</div>
+                <div class="step">3</div>
+            </div>
+            
+            <h2>Create Your Account</h2>
+            
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" placeholder="Choose a username" required>
+                    <div id="username-error" class="error-message">Please enter a valid username</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                    <div id="email-error" class="error-message">Please enter a valid email address</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Create a password" required>
+                    
+                    <div class="password-requirements">
+                        <div class="password-requirement" id="length-req">
+                            <i class="fas fa-circle"></i> At least 8 characters
+                        </div>
+                        <div class="password-requirement" id="uppercase-req">
+                            <i class="fas fa-circle"></i> One uppercase letter
+                        </div>
+                        <div class="password-requirement" id="number-req">
+                            <i class="fas fa-circle"></i> One number
+                        </div>
+                        <div class="password-requirement" id="special-req">
+                            <i class="fas fa-circle"></i> One special character
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirm_password" placeholder="Confirm your password" required>
+                    <div id="password-match-error" class="error-message">Passwords do not match</div>
+                </div>
+                
+                <button type="button" class="btn" id="sendOtpBtn" onclick="sendOTP()">Send Verification Code</button>
+            </form>
+            
+            <div id="otpContainer" class="otp-container">
+                <h3>Verify Your Email</h3>
+                <p>We've sent a 6-digit code to your email. Enter it below to continue.</p>
+                
+                <div class="form-group">
+                    <input type="text" class="form-control" id="otp" placeholder="Enter 6-digit code" maxlength="6" required>
+                    <div id="otp-error" class="error-message">Invalid verification code</div>
+                </div>
+                
+                <button type="button" class="btn" onclick="verifyOTP()">Verify & Continue</button>
+                
+                <div class="divider">
+                    <span>Didn't receive the code?</span>
+                </div>
+                
+                <button type="button" class="btn" style="background-color: transparent; color: var(--primary-color);" onclick="sendOTP()">Resend Code</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            
+            <div class="step-indicator">
+                <div class="step completed">1</div>
+                <div class="step active">2</div>
+                <div class="step">3</div>
+            </div>
+            
+            <h3>Complete Your Profile</h3>
+            
+            <form id="userDetailsForm">
+                <div class="form-group">
+                    <label for="full_name">Full Name</label>
+                    <input type="text" class="form-control" id="full_name" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                  <label for="Enter Grade you currently in">Grade</label>
+                  <input type="text" class="form-control" id="full_name" placeholder="Enter your full name" required>
+              </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" class="form-control" id="phone" placeholder="Enter your phone number" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" class="form-control" id="dob" required>
+                </div>
+                
+                <div class="form-group image-upload">
+                    <label>Profile Picture</label>
+                    <div class="image-preview" id="imagePreview">
+                        <i class="fas fa-user"></i>
+                        <img id="previewImg" src="" alt="Profile preview">
+                    </div>
+                    <input type="file" class="file-input" id="profileImage" accept="image/*" required>
+                    <label for="profileImage" class="upload-btn">
+                        <i class="fas fa-upload"></i> Choose Image
+                    </label>
+                    <div id="image-error" class="error-message">Profile image is required</div>
+                </div>
+                
+                <button type="submit" class="btn">Complete Registration</button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="successModal" class="modal">
+        <div class="modal-content" style="text-align: center; padding: 40px;">
+            <div style="font-size: 60px; color: var(--success-color); margin-bottom: 20px;">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            
+            <h3>Registration Successful!</h3>
+            <p style="margin-bottom: 30px;">Your account has been created successfully.</p>
+            
+            <button type="button" class="btn" onclick="window.location.href='/login'">Proceed to Login</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+        // Initialize EmailJS 
+        emailjs.init({
+            publicKey: 'aYBj4_6cAaj7aNFNz', // Verify this matches your EmailJS account
+        });
+
+        let storedOTP;
+        
+        // Password validation
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirm_password');
+        const lengthReq = document.getElementById('length-req');
+        const uppercaseReq = document.getElementById('uppercase-req');
+        const numberReq = document.getElementById('number-req');
+        const specialReq = document.getElementById('special-req');
+        
+        passwordInput.addEventListener('input', validatePasswordRequirements);
+        confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+        
+        function validatePasswordRequirements() {
+            const password = passwordInput.value;
+            
+            // Check length
+            if (password.length >= 8) {
+                lengthReq.classList.add('valid');
+                lengthReq.querySelector('i').className = 'fas fa-check-circle';
+            } else {
+                lengthReq.classList.remove('valid');
+                lengthReq.querySelector('i').className = 'fas fa-circle';
+            }
+            
+            // Check uppercase
+            if (/[A-Z]/.test(password)) {
+                uppercaseReq.classList.add('valid');
+                uppercaseReq.querySelector('i').className = 'fas fa-check-circle';
+            } else {
+                uppercaseReq.classList.remove('valid');
+                uppercaseReq.querySelector('i').className = 'fas fa-circle';
+            }
+            
+            // Check number
+            if (/\d/.test(password)) {
+                numberReq.classList.add('valid');
+                numberReq.querySelector('i').className = 'fas fa-check-circle';
+            } else {
+                numberReq.classList.remove('valid');
+                numberReq.querySelector('i').className = 'fas fa-circle';
+            }
+            
+            // Check special character
+            if (/[!@#$%^&*()_+]/.test(password)) {
+                specialReq.classList.add('valid');
+                specialReq.querySelector('i').className = 'fas fa-check-circle';
+            } else {
+                specialReq.classList.remove('valid');
+                specialReq.querySelector('i').className = 'fas fa-circle';
+            }
+        }
+        
+        function checkPasswordMatch() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const passwordMatchError = document.getElementById('password-match-error');
+            
+            if (confirmPassword === '') {
+                passwordMatchError.style.display = 'none';
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                passwordMatchError.style.display = 'block';
+            } else {
+                passwordMatchError.style.display = 'none';
+            }
+        }
+
+        function validatePassword(password) {
+            const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+            return regex.test(password);
+        }
+
+        function generateOTP() {
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        }
+
+        function sendOTP() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            const emailError = document.getElementById('email-error');
+            
+            // Basic email validation
+            if (!email || !email.includes('@') || !email.includes('.')) {
+                emailError.style.display = 'block';
+                return;
+            } else {
+                emailError.style.display = 'none';
+            }
+
+            if (password !== confirmPassword) {
+                document.getElementById('password-match-error').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('password-match-error').style.display = 'none';
+            }
+
+            if (!validatePassword(password)) {
+                // The visual indicators already show the requirements
+                return;
+            }
+
+            // Disable button and show loading state
+            const sendOtpBtn = document.getElementById('sendOtpBtn');
+            sendOtpBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            sendOtpBtn.disabled = true;
+
+            storedOTP = generateOTP();
+
+            // Send OTP via EmailJS
+            emailjs.send('MRCCMS', 'MRCCMS', {
+                otp: storedOTP,
+                to_email: email,
+                to_name: email.split('@')[0]
+            })
+            .then(() => {
+                document.getElementById('signupForm').style.display = 'none';
+                document.getElementById('otpContainer').style.display = 'block';
+                
+                // Update steps indicator
+                document.querySelector('.step-indicator .step:nth-child(1)').classList.remove('active');
+                document.querySelector('.step-indicator .step:nth-child(1)').classList.add('completed');
+                document.querySelector('.step-indicator .step:nth-child(2)').classList.add('active');
+            })
+            .catch((error) => {
+                alert('Failed to send verification code. Please try again.');
+                console.error('EmailJS error details:', error);
+                
+                // Reset button state
+                sendOtpBtn.innerHTML = 'Send Verification Code';
+                sendOtpBtn.disabled = false;
+            });
+        }
+
+        async function verifyOTP() {
+            const enteredOTP = document.getElementById('otp').value.trim();
+            const otpError = document.getElementById('otp-error');
+            
+            if (enteredOTP !== storedOTP) {
+                otpError.style.display = 'block';
+                return;
+            } else {
+                otpError.style.display = 'none';
+            }
+
+            // Show modal after successful OTP verification
+            document.getElementById('detailsModal').style.display = 'flex';
+            
+            // Generate user ID through backend
+            try {
+                const response = await fetch('/api/generate-user-id/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: document.getElementById('email').value
+                    })
+                });
+                
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error);
+                
+                window.userId = data.user_id; // Store generated user ID
+            } catch (error) {
+                console.error('Error generating user ID:', error);
+                alert('Error in registration process. Please try again.');
+            }
+        }
+
+        // Profile image preview
+        const profileImage = document.getElementById('profileImage');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        
+        profileImage.addEventListener('change', function() {
+            const file = this.files[0];
+            const imageError = document.getElementById('image-error');
+            
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    previewImg.style.display = 'block';
+                    imagePreview.querySelector('i').style.display = 'none';
+                    imageError.style.display = 'none';
+                }
+                
+                reader.readAsDataURL(file);
+            } else {
+                previewImg.style.display = 'none';
+                imagePreview.querySelector('i').style.display = 'block';
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('userDetailsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Check if image is uploaded
+            if (!profileImage.files || profileImage.files.length === 0) {
+                document.getElementById('image-error').style.display = 'block';
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('user_id', window.userId);
+            formData.append('full_name', document.getElementById('full_name').value);
+            formData.append('phone', document.getElementById('phone').value);
+            formData.append('dob', document.getElementById('dob').value);
+            formData.append('email', document.getElementById('email').value);
+            formData.append('username', document.getElementById('username').value);
+            formData.append('password', document.getElementById('password').value);
+            formData.append('profile_image', profileImage.files[0]);
+
+            try {
+                const response = await fetch('/api/register-user/', {
+                    method: 'POST',
+                    body: formData // Send as FormData to handle file upload
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error);
+                
+                // Hide details modal and show success modal
+                document.getElementById('detailsModal').style.display = 'none';
+                document.getElementById('successModal').style.display = 'flex';
+                
+                // Update steps indicator
+                document.querySelector('.step-indicator .step:nth-child(2)').classList.remove('active');
+                document.querySelector('.step-indicator .step:nth-child(2)').classList.add('completed');
+                document.querySelector('.step-indicator .step:nth-child(3)').classList.add('active');
+                document.querySelector('.step-indicator .step:nth-child(3)').classList.add('completed');
+            } catch (error) {
+                console.error('Registration failed:', error);
+                alert('Registration failed. Please try again.');
+            }
+        });
+
+        // Close modal functionality
+        document.querySelector('.close').addEventListener('click', () => {
+            document.getElementById('detailsModal').style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === document.getElementById('detailsModal')) {
+                document.getElementById('detailsModal').style.display = 'none';
+            }
+            if (e.target === document.getElementById('successModal')) {
+                document.getElementById('successModal').style.display = 'none';
+            }
+        });
+        if (!localStorage.getItem('userDatabase')) {
+    localStorage.setItem('userDatabase', JSON.stringify([]));
+    localStorage.setItem('lastUserId', '1000'); // Starting from 1000
+}
+
+// Function to check if email or phone already exists
+function checkUniqueness(email, phone = null) {
+    const userDatabase = JSON.parse(localStorage.getItem('userDatabase'));
+    
+    const emailExists = userDatabase.some(user => user.email === email);
+    if (emailExists) {
+        return { unique: false, message: 'Email already registered' };
+    }
+    
+    if (phone) {
+        const phoneExists = userDatabase.some(user => user.phone === phone);
+        if (phoneExists) {
+            return { unique: false, message: 'Phone number already registered' };
+        }
+    }
+    
+    return { unique: true };
+}
+
+// Generate unique user ID
+function generateUniqueUserId() {
+    let lastId = parseInt(localStorage.getItem('lastUserId'));
+    lastId++;
+    
+    // Ensure it's always 4 digits
+    if (lastId > 9999) {
+        lastId = 1000; // Reset to 1000 if exceeds 9999
+    }
+    
+    localStorage.setItem('lastUserId', lastId.toString());
+    return lastId.toString();
+}
+
+// Replace the existing verifyOTP function
+async function verifyOTP() {
+    const enteredOTP = document.getElementById('otp').value.trim();
+    const otpError = document.getElementById('otp-error');
+    
+    if (enteredOTP !== storedOTP) {
+        otpError.style.display = 'block';
+        return;
+    } else {
+        otpError.style.display = 'none';
+    }
+
+    // Check if email is unique
+    const email = document.getElementById('email').value;
+    const uniqueCheck = checkUniqueness(email);
+    
+    if (!uniqueCheck.unique) {
+        otpError.textContent = uniqueCheck.message;
+        otpError.style.display = 'block';
+        return;
+    }
+
+    // Show modal after successful OTP verification
+    document.getElementById('detailsModal').style.display = 'flex';
+    
+    // Generate user ID
+    const userId = generateUniqueUserId();
+    window.userId = userId; // Store generated user ID
+}
+
+// Modify the user details form submission handler
+document.getElementById('userDetailsForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Check if image is uploaded
+    if (!profileImage.files || profileImage.files.length === 0) {
+        document.getElementById('image-error').style.display = 'block';
+        return;
+    }
+    
+    const fullName = document.getElementById('full_name').value;
+    const phone = document.getElementById('phone').value;
+    const dob = document.getElementById('dob').value;
+    const email = document.getElementById('email').value;
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    
+    // Check phone uniqueness before submitting
+    const uniqueCheck = checkUniqueness(email, phone);
+    if (!uniqueCheck.unique) {
+        alert(uniqueCheck.message);
+        return;
+    }
+    
+    // Create user object
+    const userData = {
+        userId: window.userId,
+        fullName,
+        phone,
+        dob,
+        email,
+        username,
+        password: btoa(password), // Basic encoding, not secure for production
+        profileImage: await getBase64(profileImage.files[0])
+    };
+    
+    // Save to local storage (in a real app, this would go to a server)
+    const userDatabase = JSON.parse(localStorage.getItem('userDatabase'));
+    userDatabase.push(userData);
+    localStorage.setItem('userDatabase', JSON.stringify(userDatabase));
+    
+    // Store current user in session
+    sessionStorage.setItem('currentUser', JSON.stringify(userData));
+    
+    // Hide details modal and show success modal
+    document.getElementById('detailsModal').style.display = 'none';
+    document.getElementById('successModal').style.display = 'flex';
+    
+    // Update steps indicator
+    document.querySelector('.step-indicator .step:nth-child(2)').classList.remove('active');
+    document.querySelector('.step-indicator .step:nth-child(2)').classList.add('completed');
+    document.querySelector('.step-indicator .step:nth-child(3)').classList.add('active');
+    document.querySelector('.step-indicator .step:nth-child(3)').classList.add('completed');
+});
+
+// Helper function to convert file to base64 for storage
+function getBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+}
+
+// Modify the success modal button to redirect to home page
+document.querySelector('#successModal .btn').onclick = function() {
+    window.location.href = 'home.html';
+};
+    </script>
+</body>
+</html>

@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <title>Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --text-light: #ecf0f1;
+            --bg-light: #f8f9f9;
+            --transition-speed: 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-light);
+        }
+     
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 250px;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            transition: all var(--transition-speed) ease;
+            z-index: 1000;
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            right: -15px;
+            top: 20px;
+            background: var(--accent-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            transition: opacity var(--transition-speed) ease;
+        }
+
+        .sidebar.collapsed .logo {
+            content: "LOGO";
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .nav-link i {
+            width: 30px;
+            text-align: center;
+        }
+
+        .link-text {
+            margin-left: 10px;
+            transition: opacity var(--transition-speed) ease;
+        }
+
+        .sidebar.collapsed .link-text {
+            display: none;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: margin var(--transition-speed) ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 70px;
+        }
+
+        .content-section {
+            display: none;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(odd) {
+            background-color: #d7caca;
+        }
+           .action-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 2px;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+        }
+
+        .ready-btn {
+            background-color: #2ecc71;
+        }
+
+        .chart-container {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            size-adjust: fixed;
+        }
+
+        .filters {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.status-available {
+    background-color: #e6f4ea;
+    color: #1e7e34;
+}
+
+.status-unavailable {
+    background-color: #fbe9e7;
+    color: #d32f2f;
+}
+
+.available-btn {
+    background-color: #28a745 !important;
+}
+
+.unavailable-btn {
+    background-color: #dc3545 !important;
+}
+
+tr.unavailable {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+ @media (max-width: 768px) {
+    .sidebar {
+    width: 70px;
+    }
+
+    .main-content {
+    margin-left: 70px;
+    }
+
+    .sidebar.expanded {
+        width: 250px;
+        }
+
+    .main-content.collapsed {
+        margin-left: 250px;
+            }
+        }
+        .menu-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+    border-color: var(--accent-color);
+    outline: none;
+}
+
+.menu-list {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#menu-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#menu-table th, #menu-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+#menu-table th {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+}
+
+#menu-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#menu-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.action-btn {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 2px;
+    transition: background-color 0.3s ease;
+}
+
+.action-btn:hover {
+    background-color: #2980b9;
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+.available-btn {
+    background-color: #28a745 !important;
+}
+
+.unavailable-btn {
+    background-color: #dc3545 !important;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.status-available {
+    background-color: #e6f4ea;
+    color: #1e7e34;
+}
+
+.status-unavailable {
+    background-color: #fbe9e7;
+    color: #d32f2f;
+}
+#menu-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#menu-table th, #menu-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+#menu-table th {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+}
+
+#menu-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#menu-table tr:hover {
+    background-color: #f1f1f1;
+}
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    background-color: #2ecc71;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.toast.error {
+    background-color: #e74c3c;
+}
+  * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --text-light: #ecf0f1;
+            --bg-light: #f8f9f9;
+            --transition-speed: 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-light);
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 250px;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            transition: all var(--transition-speed) ease;
+            z-index: 1000;
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            right: -15px;
+            top: 20px;
+            background: var(--accent-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            transition: opacity var(--transition-speed) ease;
+        }
+
+        .sidebar.collapsed .logo {
+            content: "LOGO";
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .nav-link i {
+            width: 30px;
+            text-align: center;
+        }
+
+        .link-text {
+            margin-left: 10px;
+            transition: opacity var(--transition-speed) ease;
+        }
+
+        .sidebar.collapsed .link-text {
+            display: none;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: margin var(--transition-speed) ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 70px;
+        }
+
+        .content-section {
+            display: none;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .action-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 2px;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+        }
+
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .available-btn {
+            background-color: #28a745 !important;
+        }
+
+        .unavailable-btn {
+            background-color: #dc3545 !important;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .status-available {
+            background-color: #e6f4ea;
+            color: #1e7e34;
+        }
+
+        .status-unavailable {
+            background-color: #fbe9e7;
+            color: #d32f2f;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            background-color: #2ecc71;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .toast.error {
+            background-color: #e74c3c;
+        }
+
+        /* Popular Choices Section */
+        .popular-choices {
+            margin-top: 20px;
+        }
+
+        .popular-choices h2 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .popular-choices table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .popular-choices th,
+        .popular-choices td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .popular-choices th {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+        }
+
+        .popular-choices tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .popular-choices tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .popular-choices .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .popular-choices .actions button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .popular-choices .actions button:hover {
+            background-color: #2980b9;
+        }
+
+        .popular-choices .actions button.delete-btn {
+            background-color: #e74c3c;
+        }
+
+        .popular-choices .actions button.delete-btn:hover {
+            background-color: #c0392b;
+        }
+
+        /* Improved Transactions UI */
+        .transactions-section {
+            margin-top: 20px;
+        }
+
+        .transactions-section h1 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filters select,
+        .filters input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .filters select:focus,
+        .filters input:focus {
+            border-color: var(--accent-color);
+            outline: none;
+        }
+
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .transactions-table th,
+        .transactions-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .transactions-table th {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+        }
+
+        .transactions-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .transactions-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .transactions-table .total {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">Admin Panel</div>
+            <button class="toggle-btn" id="toggleBtn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="#dashboard" class="nav-link active">
+                    <i class="fas fa-home"></i>
+                    <span class="link-text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#menu" class="nav-link">
+                    <i class="fas fa-utensils"></i>
+                    <span class="link-text">Menu Management</span>
+                </a>
+            </li>
+            <li>
+                <a href="#orders" class="nav-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="link-text">Orders</span>
+                </a>
+            </li>
+            <li>
+                <a href="#delivery" class="nav-link">
+                    <i class="fas fa-truck"></i>
+                    <span class="link-text">Delivery</span>
+                </a>
+            </li>
+            <li>
+                <a href="#transactions" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span class="link-text">Transactions</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content" id="mainContent">
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="content-section active">
+            <h1>Dashboard</h1>
+            <div class="chart-container">
+                <canvas id="salesOverviewChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="itemDistributionChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Menu Management Section -->
+        <div id="menu" class="content-section">
+            <h1>Menu Management</h1>
+            <div class="menu-editor">
+                <!-- Form for Adding/Editing Menu Items -->
+                <div class="form-container">
+                    <h3>Add/Edit Menu Item</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select id="category" class="form-input">
+                                <option value="Cold Drink">Cold Drink</option>
+                                <option value="Combo offers">Combo Offers</option>
+                                <option value="Hot Drink">Hot Drink</option>
+                                <option value="Food">Food</option>
+                                <option value="Snacks">Snacks</option>
+                                <option value="Bakery Items">Bakery Items</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="item-name">Item Name</label>
+                            <input type="text" id="item-name" class="form-input" placeholder="Enter item name">
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Price (Rs.)</label>
+                            <input type="number" id="price" class="form-input" placeholder="Enter price">
+                        </div>
+                        <div class="form-group">
+                            <label for="availability">Available</label>
+                            <input type="checkbox" id="availability" checked>
+                        </div>
+                    </div>
+                    <button id="add-edit-button" class="action-btn" onclick="addItem()">Add Item to Menu</button>
+                </div>
+        
+                <!-- Menu List Table -->
+                <div class="menu-list">
+                    <h3>Menu Items</h3>
+                    <table id="menu-table">
+                        <thead>
+                            <tr>
+                                <th>S.N.</th>
+                                <th>Category</th>
+                                <th>Item Name</th>
+                                <th>Price (Rs.)</th>
+                                <th>Availability</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="menu-list"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Section -->
+        <div id="orders" class="content-section">
+            <h1>Current Orders</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>S.N.</th>
+                        <th>User ID</th> <!-- New Column for User ID -->
+                        <th>Table Number</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Payment Method</th>
+                        <th>Transaction ID</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-list"></tbody>
+            </table>
+            <h2 style="margin-top: 40px;">Today's Sales Summary</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+                <!-- Summary Cards -->
+                <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                    <h3>Total Sales</h3>
+                    <p id="total-sales-amount" style="font-size: 24px; color: #2ecc71; font-weight: bold;"></p>
+                </div>
+                <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                    <h3>Orders Completed</h3>
+                    <p id="orders-completed" style="font-size: 24px; color: #3498db; font-weight: bold;"></p>
+                </div>
+            </div>
+        
+            <h3 style="margin-top: 30px;">Items Sold Today</h3>
+            <table style="margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th>S.N.</th>
+                        <th>Item Name</th>
+                        <th>Category</th>
+                        <th>Quantity Sold</th>
+                        <th>Total Revenue</th>
+                    </tr>
+                </thead>
+                <tbody id="sales-summary-list"></tbody>
+            </table>
+        </div>
+
+        <!-- Delivery Section -->
+        <div id="delivery" class="content-section">
+            <h1>Delivery Management</h1>
+            <h2>Ready to Deliver</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>S.N.</th>
+                        <th>USer ID</th>
+                        <th>Table Number</th>
+                        <th>Payment Method</th>
+                        <th>Transaction ID</th>
+                        <th>Items</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="delivery-list"></tbody>
+            </table>
+            
+            <h2>Delivered Orders</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>S.N.</th>
+                        <th>User ID</th>
+                        <th>Table Number</th>
+                        <th>Payment Method</th>
+                        <th>Transaction ID</th>
+                        <th>Items</th>
+                        <th>Delivery Date</th>
+                    </tr>
+                </thead>
+                <tbody id="delivered-list"></tbody>
+            </table>
+        </div>
+
+        <!-- Transactions Section -->
+        <div id="transactions" class="content-section">
+            <h1>Transaction History</h1>
+            <div class="filters">
+                <select id="paymentFilter">
+                    <option value="">All Payment Methods</option>
+                    <option value="COD">COD</option>
+                    <option value="eSewa">Esewa</option>
+                    <option value="Khalti">Khalti</option>
+                </select>
+                <input type="date" id="startDate">
+                <input type="date" id="endDate">
+                <button class="action-btn" onclick="renderTransactions()">Filter</button>
+            </div>
+   <table>
+    <thead>
+        <tr>
+            <th>S.N.</th>
+            <th>Date</th>
+            <th>Table Number</th>
+            <th>Payment Method</th>
+            <th>Total (Rs.)</th>
+            <th>Items</th>
+            <th>Transaction Number</th>
+        </tr>
+    </thead>
+    <tbody id="transactions-list"></tbody>
+</table>
+        </div>
+    </div>
+
+    <script>
+        // Initialize data from localStorage
+        let menu = JSON.parse(localStorage.getItem('menu')) || [];
+    
+        let readyOrders = JSON.parse(localStorage.getItem('readyOrders')) || [];
+        let completedTransactions = JSON.parse(localStorage.getItem('completedTransactions')) || [];
+        let editIndex = -1;
+
+    function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+
+        // Sidebar Toggle
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const toggleBtn = document.getElementById('toggleBtn');
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
+        });
+
+        // Navigation
+        const navLinks = document.querySelectorAll('.nav-link');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+
+                const targetId = link.getAttribute('href').substring(1);
+                contentSections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === targetId) {
+                        section.classList.add('active');
+                        if (targetId === 'dashboard') {
+                            renderDashboard();
+                        }
+                    }
+                });
+            });
+        });
+
+        // Menu Management Functions
+        function addItem() {
+    const category = document.getElementById('category').value;
+    const itemName = document.getElementById('item-name').value.trim();
+    const price = document.getElementById('price').value;
+    const available = document.getElementById('availability').checked;
+
+    if (category && itemName && price) {
+        // Check for duplicates only when adding a new item, not when editing
+        if (editIndex === -1) {
+            // Check if an item with the same name already exists
+            const duplicateItem = menu.find(item => 
+                item.itemName.toLowerCase() === itemName.toLowerCase()
+            );
+            
+            if (duplicateItem) {
+                showToast('Item with this name already exists in the menu!', 'error');
+                return;
+            }
+            
+            menu.push({ category, itemName, price, available });
+            showToast('Item added successfully!');
+        } else {
+            // When editing, check if the name is changed and if the new name already exists
+            const originalName = menu[editIndex].itemName;
+            if (originalName.toLowerCase() !== itemName.toLowerCase()) {
+                // Check if another item (not the one being edited) has this name
+                const duplicateItem = menu.find((item, index) => 
+                    index !== editIndex && item.itemName.toLowerCase() === itemName.toLowerCase()
+                );
+                
+                if (duplicateItem) {
+                    showToast('Cannot rename: another item with this name already exists!', 'error');
+                    return;
+                }
+            }
+            
+            menu[editIndex] = { category, itemName, price, available };
+            editIndex = -1;
+            document.getElementById('add-edit-button').innerText = 'Add Item to Menu';
+            showToast('Item updated successfully!');
+        }
+
+        localStorage.setItem('menu', JSON.stringify(menu));
+        renderMenu();
+        resetMenuForm();
+    } else {
+        showToast('Please fill in all required fields!', 'error');
+    }
+}
+
+        function editMenuItem(index) {
+            const item = menu[index];
+            document.getElementById('category').value = item.category;
+            document.getElementById('item-name').value = item.itemName;
+            document.getElementById('price').value = item.price;
+            document.getElementById('availability').checked = item.available;
+            editIndex = index;
+            document.getElementById('add-edit-button').innerText = 'Save Changes';
+        }
+
+        function deleteMenuItem(index) {
+            if (confirm('Are you sure you want to delete this item?')) {
+                menu.splice(index, 1);
+                localStorage.setItem('menu', JSON.stringify(menu));
+                renderMenu();
+            }
+        }
+
+        function toggleAvailability(index) {
+            menu[index].available = !menu[index].available;
+            localStorage.setItem('menu', JSON.stringify(menu));
+            renderMenu();
+        }
+
+        function resetMenuForm() {
+            document.getElementById('item-name').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('availability').checked = true;
+            document.getElementById('category-color').value = '#ffffff';
+            editIndex = -1;
+        }
+
+        // Order Management Functions
+        function markAsReady(index) {
+            const order = transactions[index];
+            readyOrders.push(order);
+            transactions.splice(index, 1);
+            localStorage.setItem('readyOrders', JSON.stringify(readyOrders));
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            renderOrders();
+            renderDelivery();
+        }
+
+        function deleteOrder(index) {
+            if (confirm('Are you sure you want to delete this order?')) {
+                transactions.splice(index, 1);
+                localStorage.setItem('transactions', JSON.stringify(transactions));
+                renderOrders();
+            }
+        }
+
+        // Delivery Management Functions
+        function markAsDelivered(index) {
+            if (confirm('Mark this order as delivered?')) {
+                const deliveredOrder = readyOrders[index];
+                deliveredOrder.deliveredDate = new Date().toISOString();
+                completedTransactions.push(deliveredOrder);
+                readyOrders.splice(index, 1);
+
+                // Cleanup old transactions (older than 30 days)
+                const cutoffDate = new Date();
+                cutoffDate.setDate(cutoffDate.getDate() - 30);
+                completedTransactions = completedTransactions.filter(t => {
+                    const transactionDate = new Date(t.deliveredDate || t.date);
+                    return transactionDate > cutoffDate;
+                });
+
+                localStorage.setItem('completedTransactions', JSON.stringify(completedTransactions));
+                localStorage.setItem('readyOrders', JSON.stringify(readyOrders));
+                renderDelivery();
+                renderTransactions();
+            }
+        }
+
+        // Render Functions
+        function renderMenu() {
+            const menuList = document.getElementById('menu-list');
+            menuList.innerHTML = '';
+
+            menu.forEach((item, index) => {
+                menuList.innerHTML += `
+                        <td>${index + 1}</td>
+                        <td>${item.category}</td>
+                        <td>${item.itemName}</td>
+                        <td>Rs. ${item.price}</td>
+                        <td><span class="status-badge ${item.available ? 'status-available' : 'status-unavailable'}">
+                            ${item.available ? 'Available' : 'Unavailable'}
+                        </span></td>
+                        <td>
+                            <button class="action-btn" onclick="editMenuItem(${index})">Edit</button>
+                            <button class="action-btn delete-btn" onclick="deleteMenuItem(${index})">Delete</button>
+                            <button class="action-btn ${item.available ? 'unavailable-btn' : 'available-btn'}" 
+                                    onclick="toggleAvailability(${index})">
+                                ${item.available ? 'Mark Unavailable' : 'Mark Available'}
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        const ordersList = document.getElementById('orders-list');
+    ordersList.innerHTML = '';
+
+    let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+    transactions.forEach((order, index) => {
+        const items = order.cart.map(item => `${item.itemName} (${item.quantity})`).join(', ');
+        ordersList.innerHTML += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${order.user_id || 'N/A'}</td>
+                <td>${order.tableNumber}</td>
+                <td>${items}</td>
+                <td>Rs. ${order.totalCost}</td>
+                <td>${order.paymentMethod || 'N/A'}</td>
+                <td>${order.transactionNumber || 'N/A'}</td>
+                <td>Pending</td>
+                <td>
+                    <button class="action-btn ready-btn" onclick="markAsReady(${index})">Mark Ready</button>
+                    <button class="action-btn delete-btn" onclick="deleteOrder(${index})">Delete</button>
+                </td>
+            </tr>
+        `;
+    });
+
+    // Update sales summary
+    updateSalesSummary();
+        // Also update the sales summary when marking orders as ready or delivered
+        const originalMarkAsReady = markAsReady;
+        markAsReady = function(index) {
+            originalMarkAsReady(index);
+            updateSalesSummary();
+        };
+
+        const originalMarkAsDelivered = markAsDelivered;
+        markAsDelivered = function(index) {
+            originalMarkAsDelivered(index);
+            updateSalesSummary();
+        };
+
+        function renderDelivery() {
+            const deliveryList = document.getElementById('delivery-list');
+            const deliveredList = document.getElementById('delivered-list');
+
+            deliveryList.innerHTML = '';
+            readyOrders.forEach((order, index) => {
+                deliveryList.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${order.tableNumber}</td>
+                        <td>${order.paymentMethod || 'N/A'}</td>
+                        <td>${order.transactionNumber || 'N/A'}</td>
+                        <td>${order.cart.map(item => `${item.itemName} (${item.quantity})`).join(', ')}</td>
+                        <td>
+                            <button class="action-btn" onclick="markAsDelivered(${index})">Mark Delivered</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            deliveredList.innerHTML = '';
+            completedTransactions.forEach((order, index) => {
+                deliveredList.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${order.tableNumber}</td>
+                        <td>${order.paymentMethod || 'N/A'}</td>
+                        <td>${order.transactionNumber || 'N/A'}</td>
+                        <td>${order.cart.map(item => `${item.itemName} (${item.quantity})`).join(', ')}</td>
+                        <td>${new Date(order.deliveredDate).toLocaleDateString()}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function renderTransactions() {
+            const transactionsList = document.getElementById('transactions-list');
+            const paymentFilter = document.getElementById('paymentFilter').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            const filtered = completedTransactions.filter(transaction => {
+                const transDate = new Date(transaction.deliveredDate || transaction.date);
+                const filterDate = new Date(transDate.toISOString().split('T')[0]);
+                
+                return (!paymentFilter || transaction.paymentMethod === paymentFilter) &&
+                       (!startDate || filterDate >= new Date(startDate)) &&
+                       (!endDate || filterDate <= new Date(endDate));
+            });
+            
+            transactionsList.innerHTML = '';
+            
+            filtered.forEach((transaction, index) => {
+                const items = transaction.cart.map(item => `${item.itemName} (${item.quantity})`).join(', ');
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${new Date(transaction.deliveredDate || transaction.date).toLocaleDateString()}</td>
+                    <td>${transaction.tableNumber}</td>
+                    <td>${transaction.paymentMethod || 'N/A'}</td>
+                    <td>Rs. ${transaction.totalCost}</td>
+                    <td>${items}</td>
+                    <td>${transaction.transactionNumber || 'N/A'}</td>
+                `;
+                transactionsList.appendChild(row);
+            });
+        }
+
+        function updateSalesSummary() {
+            const today = new Date().toLocaleDateString();
+            let totalSales = 0;
+            let ordersCompleted = 0;
+            const itemsSold = {};
+
+            // Combine completed transactions and ready orders for today
+            const allOrders = [...completedTransactions, ...readyOrders];
+            
+            allOrders.forEach(order => {
+                const orderDate = new Date(order.deliveredDate || order.date).toLocaleDateString();
+                if (orderDate === today) {
+                    totalSales += parseFloat(order.totalCost);
+                    ordersCompleted++;
+
+                    // Track items sold
+                    order.cart.forEach(item => {
+                        if (!itemsSold[item.itemName]) {
+                            itemsSold[item.itemName] = {
+                                category: item.category,
+                                quantity: 0,
+                                revenue: 0
+                            };
+                        }
+                        itemsSold[item.itemName].quantity += parseInt(item.quantity);
+                        itemsSold[item.itemName].revenue += item.price * item.quantity;
+                    });
+                }
+            });
+
+            // Update summary cards
+            document.getElementById('total-sales-amount').textContent = `Rs. ${totalSales.toFixed(2)}`;
+            document.getElementById('orders-completed').textContent = ordersCompleted;
+
+            // Update items sold table
+            const salesSummaryList = document.getElementById('sales-summary-list');
+            salesSummaryList.innerHTML = '';
+
+            Object.entries(itemsSold).forEach(([itemName, data], index) => {
+                salesSummaryList.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${itemName}</td>
+                        <td>${data.category || 'N/A'}</td>
+                        <td>${data.quantity}</td>
+                        <td>Rs. ${data.revenue.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Dashboard Charts
+        function renderDashboard() {
+            renderSalesOverview();
+            renderItemDistribution();
+        }
+
+        function renderSalesOverview() {
+            const ctx = document.getElementById('salesOverviewChart').getContext('2d');
+            const salesData = aggregateSalesData();
+
+            if (window.salesChart) {
+                window.salesChart.destroy();
+            }
+
+            window.salesChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: salesData.labels,
+                    datasets: [{
+                        label: 'Daily Sales (Rs.)',
+                        data: salesData.values,
+                        borderColor: '#3498db',
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function renderItemDistribution() {
+            const ctx = document.getElementById('itemDistributionChart').getContext('2d');
+            const itemData = aggregateItemData();
+
+            if (window.itemChart) {
+                window.itemChart.destroy();
+            }
+
+            window.itemChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: itemData.labels,
+                    datasets: [{
+                        data: itemData.values,
+                        backgroundColor: generateColors(itemData.labels.length)
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'right' }
+                    }
+                }
+            });
+        }
+
+        // Utility Functions
+        function aggregateSalesData() {
+            const salesByDate = {};
+            completedTransactions.forEach(transaction => {
+                const date = new Date(transaction.deliveredDate).toLocaleDateString();
+                salesByDate[date] = (salesByDate[date] || 0) + parseFloat(transaction.totalCost);
+            });
+            return {
+                labels: Object.keys(salesByDate),
+                values: Object.values(salesByDate)
+            };
+        }
+
+        function aggregateItemData() {
+            const itemCounts = {};
+            completedTransactions.forEach(transaction => {
+                transaction.cart.forEach(item => {
+                    itemCounts[item.itemName] = (itemCounts[item.itemName] || 0) + parseInt(item.quantity);
+                });
+            });
+            return {
+                labels: Object.keys(itemCounts),
+                values: Object.values(itemCounts)
+            };
+        }
+
+        function generateColors(count) {
+            const colors = [];
+            for (let i = 0; i < count; i++) {
+                colors.push(`hsl(${(i * 360) / count}, 70%, 50%)`);
+            }
+            return colors;
+        }
+
+        // Initialize
+        function initializeAdmin() {
+            renderMenu();
+            renderOrders();
+            renderDelivery();
+            renderTransactions();
+            renderDashboard();
+        }
+
+        // Mobile Responsiveness
+        function handleResize() {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('expanded');
+            } else {
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('expanded');
+            }
+        }
+
+        // Event Listeners
+        window.addEventListener('resize', handleResize);
+        window.addEventListener('load', initializeAdmin);
+    </script>
+</body>
+</html>

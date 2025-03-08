@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canteen Management System - FAQ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #2d3748;
+            line-height: 1.6;
+            padding: 30px;
+            max-width: 100%;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+            background-color: rgba(140, 226, 125, 0.9);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header Styling */
+        h1 {
+            color: #3041b4;
+            text-align: center;
+            font-size: 2.5rem;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 50px;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #3a6ea5, #60a5fa);
+            border-radius: 2px;
+        }
+
+        /* FAQ Section Styling */
+        .faq-section {
+            background: #bb8888;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 0;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            border-left: 4px solid transparent;
+        }
+
+        .faq-section:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #3a6ea5;
+        }
+
+        /* Question Styling */
+        .faq-question {
+            font-weight: 500;
+            color: #3a6ea5;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .faq-section:hover .faq-question {
+            color: #2563eb;
+        }
+
+        /* Answer Styling */
+        .faq-answer {
+            display: none;
+            padding: 0 20px 20px 20px;
+            font-size: 1rem;
+            color: #4b5563;
+            line-height: 1.7;
+            font-weight: 400;
+            border-top: 1px solid #102145;
+            margin-top: -1px;
+        }
+
+        /* Plus icon for toggling */
+        .plus-icon {
+            font-size: 24px;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            color: #3a6ea5;
+        }
+
+        .active .plus-icon {
+            transform: rotate(45deg);
+            color: #2563eb;
+        }
+
+        /* Active FAQ Section */
+        .active {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #2563eb;
+        }
+
+        .active .faq-question {
+            color: #2563eb;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 30px;
+            }
+
+            .faq-question {
+                font-size: 1rem;
+                padding: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.7rem;
+            }
+
+            .container {
+                padding: 20px 15px;
+            }
+
+            .faq-question {
+                font-size: 0.95rem;
+                padding: 14px;
+            }
+        }
+
+        /* Toggle Animation */
+        .active .faq-answer {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Canteen Management System - FAQ</h1>
+        
+        <!-- FAQ Section 1 -->
+        <div class="faq-section">
+            <div class="faq-question" onclick="toggleAnswer(this)">
+                How do I create an account in the canteen management system?
+                <span class="plus-icon">+</span>
+            </div>
+            <div class="faq-answer">To create an account, click on the "Sign Up" button on the homepage. Fill in your details, including your name, email, and password. Once registered, you'll receive a confirmation email to verify your account.</div>
+        </div>
+
+        <!-- FAQ Section 2 -->
+        <div class="faq-section">
+            <div class="faq-question" onclick="toggleAnswer(this)">
+                How do I log in to the system?
+                <span class="plus-icon">+</span>
+            </div>
+            <div class="faq-answer">To log in, click on the "Login" button on the homepage. Enter your registered email and password. If you've forgotten your password, click on "Forgot Password" to reset it.</div>
+        </div>
+
+        <!-- FAQ Section 3 -->
+        <div class="faq-section">
+            <div class="faq-question" onclick="toggleAnswer(this)">
+                How do I place an order?
+                <span class="plus-icon">+</span>
+            </div>
+            <div class="faq-answer">After logging in, browse through the menu, select the items you want, and add them to your cart. Once you're ready, go to your cart, review your order, and click "Place Order." You can choose to pay online or in cash.</div>
+        </div>
+
+        <!-- FAQ Section 4 -->
+        <div class="faq-section">
+            <div class="faq-question" onclick="toggleAnswer(this)">
+                Can I modify my order after placing it?
+                <span class="plus-icon">+</span>
+            </div>
+            <div class="faq-answer">Orders cannot be modified once placed. However, you can cancel the order before it is accepted by the admin and place a new one.</div>
+        </div>
+
+        <!-- FAQ Section 5 -->
+        <div class="faq-section">
+            <div class="faq-question" onclick="toggleAnswer(this)">
+                How do I make a payment?
+                <span class="plus-icon">+</span>
+            </div>
+            <div class="faq-answer">Payments can be made online via secure payment gateways integrated into the system. If you prefer to pay in cash, you can select the "Cash Payment" option during checkout, and the admin will accept your request after receiving the payment.</div>
+        </div>
+
+        <!-- FAQ Section 6 -->
+        <div class="faq-section">
+            <div class="faq-question" onclick="toggleAnswer(this)">
+                How do I view the details of my order?
+                <span class="plus-icon">+</span>
+            </div>
+            <div class="faq-answer">You can view your order details by going to the "My Orders" section. This will show you the status, items ordered, and payment details.</div>
+        </div>
+
+        <!-- FAQ Section 7 -->
+        <div class="faq-section">
+            <div class="faq-question" onclick="toggleAnswer(this)">
+                How do I track my order status?
+                <span class="plus-icon">+</span>
+            </div>
+            <div class="faq-answer">After placing an order, you can track its status in the "My Orders" section. The status will update in real-time from "Order Placed" to "Processing," "Ready," and finally "Completed."</div>
+        </div>
+
+        <!-- FAQ Section 8 -->
+        <div class="faq-section">
+            <div class="faq-question" onclick="toggleAnswer(this)">
+                What if my order is delayed or not delivered?
+                <span class="plus-icon">+</span>
+            </div>
+            <div class="faq-answer">If your order is delayed, please contact the canteen admin directly through the "Contact Us" section. You can also check your order status for any updates.</div>
+        </div>
+
+        <!-- FAQ Section 9 -->
+        <div class="faq-section">
+            <div class="faq-question" onclick="toggleAnswer(this)">
+                How do I update my account details?
+                <span class="plus-icon">+</span>
+            </div>
+            <div class="faq-answer">To update your account details, log in and go to the "Profile" section. Here, you can change your email, password, and other personal information.</div>
+        </div>
+
+        <!-- FAQ Section 10 -->
+        <div class="faq-section">
+            <div class="faq-question" onclick="toggleAnswer(this)">
+                Can I cancel my order?
+                <span class="plus-icon">+</span>
+            </div>
+            <div class="faq-answer">Yes, you can cancel your order before the admin has accepted it. Once the order is accepted and processing begins, cancellation is no longer possible.</div>
+        </div>
+
+        <!-- FAQ Section 11 -->
+        <div class="faq-section">
+            <div class="faq-question" onclick="toggleAnswer(this)">
+                What should I do if I encounter a technical issue?
+                <span class="plus-icon">+</span>
+            </div>
+            <div class="faq-answer">If you encounter any technical issues, please report them through the "Support" section. Provide a brief description of the problem, and our team will assist you as soon as possible.</div>
+        </div>
+
+        <!-- FAQ Section 12 -->
+        <div class="faq-section">
+            <div class="faq-question" onclick="toggleAnswer(this)">
+                How do I provide feedback or suggestions?
+                <span class="plus-icon">+</span>
+            </div>
+            <div class="faq-answer">We value your feedback! You can provide feedback or suggestions through the "Feedback" section in your profile. Your input helps us improve our services.</div>
+        </div>
+
+        <footer>
+            &copy; 2025 Canteen Management System. All rights reserved.
+        </footer>
+    </div>
+
+    <script>
+        function toggleAnswer(question) {
+            // Find the parent faq-section
+            const faqSection = question.closest('.faq-section');
+            
+            // Close all other FAQs
+            document.querySelectorAll('.faq-section.active').forEach(section => {
+                if (section !== faqSection) {
+                    section.classList.remove('active');
+                }
+            });
+            
+            // Toggle the active class on the clicked FAQ
+            faqSection.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
